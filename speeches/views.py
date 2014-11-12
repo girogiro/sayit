@@ -19,9 +19,11 @@ from speeches.forms import (
     SpeechForm, SpeechAudioForm, SectionForm,
     RecordingAPIForm, SpeakerForm, SectionPickForm,
     RecordingTimestampFormSet, SpeakerDeleteForm,
+    AkomaNtosoImportForm,
     )
 from speeches.models import Speech, Speaker, Section, Recording, Tag
 from speeches.mixins import Base32SingleObjectMixin, UnmatchingSlugException
+from speeches.importers.import_akomantoso import ImportAkomaNtoso
 
 from django.views.generic import (
     View, CreateView, UpdateView, DeleteView, DetailView, ListView,
@@ -614,3 +616,21 @@ class Select2AutoResponseView(AutoResponseView):
         if id:
             qs = qs.exclude(id=id)
         request._AutoResponseView__django_select2_local.queryset = qs
+
+
+class AkomaNtosoImportView(NamespaceMixin, InstanceFormMixin, FormView):
+    template_name = 'speeches/akoma_ntoso_import_form.html'
+    form_class = AkomaNtosoImportForm
+
+    def get_success_url(self):
+        return self.reverse_lazy('speeches:home')
+
+    def form_valid(self, form):
+        importer = ImportAkomaNtoso(
+            instance=self.request.instance,
+            commit=True,
+            )
+
+        importer.import_document(form.cleaned_data['location'])
+
+        return super(AkomaNtosoImportView, self).form_valid(form)

@@ -611,3 +611,7 @@ RecordingTimestampFormSet = inlineformset_factory(
     extra=1,
     can_delete=1,
 )
+
+class AkomaNtosoImportForm(forms.Form):
+    location = forms.URLField(
+        label=_('Location of Akoma Ntoso data'))
