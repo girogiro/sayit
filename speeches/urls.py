@@ -7,7 +7,7 @@ from speeches.views import (
     SpeakerView, SpeakerList, SectionCreate, SectionUpdate, SectionDelete,
     SectionView, SectionViewAN, ParentlessList, RecordingList, RecordingView,
     RecordingUpdate, RecordingAPICreate, InstanceView, Select2AutoResponseView,
-    PopoloImportView,
+    PopoloImportView, RecentView
     )
 
 from speeches.search import InstanceSearchView
@@ -55,7 +55,7 @@ urlpatterns = patterns(
     url(r'^sections/add$', SectionCreate.as_view(), name='section-add'),
     url(r'^sections/(?P<pk>\d+)/edit$', SectionUpdate.as_view(), name='section-edit'),
     url(r'^sections/(?P<pk>\d+)/delete$', SectionDelete.as_view(), name='section-delete'),
-    url(r'^speeches$', ParentlessList.as_view(), name='parentless-list'),
+    url(r'^speeches$', RecentView.as_view(), name='parentless-list'),
 
     url(r'^recordings$', RecordingList.as_view(), name='recording-list'),
     url(r'^recording/(?P<pk>\d+)$', RecordingView.as_view(), name='recording-view'),
